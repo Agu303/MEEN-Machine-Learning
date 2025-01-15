@@ -1,0 +1,22 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+#1.1
+i = [1,2,3]
+x1 = [1,0,0]
+x2 = [0,1,0]
+y = [0,0,1]
+
+fig = plt.figure()
+ax = fig.add_subplot(projection='3d')
+ax.scatter(x1, x2, y, color='m', marker='o')  # 'r' stands for red, 'o' for circle markers
+ax.set_xlabel('X ')
+ax.set_ylabel('X2 ')
+ax.set_zlabel('Y ')
+
+plt.show()
+
+#1.2
+print("Squared error: ||y - Xw||^2")
+print(f"X =\n{X}")
+print(f"y = {y}")
