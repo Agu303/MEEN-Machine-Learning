@@ -1,33 +1,44 @@
-
-
 import matplotlib.pyplot as plt
 import numpy as np
 
-#1.1
+#1
 i = [1,2,3]
 x1 = [1,0,0]
 x2 = [0,1,0]
 y = [0,0,1]
+labels = ['i = 1', 'i = 2', 'i = 3']
 
-fig = plt.figure()
+fig = plt.figure(figsize=(10, 8))
 ax = fig.add_subplot(projection='3d')
-ax.scatter(x1, x2, y, color='m', marker='o')  # 'r' stands for red, 'o' for circle markers
-ax.set_xlabel('X ')
-ax.set_ylabel('X2 ')
-ax.set_zlabel('Y ')
+ax.scatter(x1, x2, y, color='m', marker='o') 
+ax.set_xlabel('X1', fontsize=12)
+ax.set_ylabel('X2' , fontsize=12)
+ax.set_zlabel('Y ', fontsize= 12)
+ax.view_init(elev=20, azim=30)
 
+for i, label in enumerate(labels):
+    ax.text(x1[i] - 0.1, x2[i], y[i], label, fontsize=10, color='blue') # 0.1 is label offset
+
+plt.subplots_adjust(left=0.2, right=0.8, top=0.8, bottom=0.2)
 plt.show()
 
-#1.2
+#3
 #vectors
 y = np.array([0, 0, 1])
 x1 = np.array([1, 0, 0])
 x2 = np.array([0, 1, 0])
-w = np.array([0, 0, 0])  # for example, initialize w = [w0, w1, w2]
-X = np.column_stack([x1, x2])
-y_hat = X.dot(w[1:])  # x1*w1 + x2*w2 (excluding w0 because w0 corresponds to the bias term)
-difference = y - y_hat  # Only the first two elements of y are relevant to the linear combination
+ones = np.array([1,1,1])
+X = np.column_stack([ones, x1, x2])
 
-sse = np.sum(np.abs(difference)**2)
+w2val = np.linspace(-2, 2, 100)
 
-print('#2 Squared Error:', sse)
+fw2 = [np.linalg.norm(y - X @ np.array([0, 0, w2]))**2 for w2 in w2val]
+
+plt.figure()
+plt.plot(w2val, fw2, label="$f(w2) = ||y - Xw||^2$")
+plt.xlabel("$w2$")
+plt.ylabel("$f(w2)$")
+plt.title("Plot of $f(w2)$")
+plt.grid()
+plt.legend()
+plt.show()
