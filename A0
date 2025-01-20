@@ -33,9 +33,26 @@ X = np.column_stack([ones, x1, x2])
 w2val = np.linspace(-2, 2, 100)
 
 fw2 = [np.linalg.norm(y - X @ np.array([0, 0, w2]))**2 for w2 in w2val]
+print(fw2)
 
-plt.figure()
-plt.plot(w2val, fw2, label="$f(w2) = ||y - Xw||^2$")
+
+# Partial derivative analytical
+partial_derivative = [-2 * (y - X @ np.array([0, 0, w2])) @ (X @ np.array([0, 0, 1])) for w2 in w2val]
+
+# Numerical derivative (central difference)
+h = 1e-5
+fw2_plus = [np.linalg.norm(y - X @ np.array([0, 0, w2 + h]))**2 for w2 in w2val]
+fw2_minus = [np.linalg.norm(y - X @ np.array([0, 0, w2 - h]))**2 for w2 in w2val]
+numerical_derivative = [(fw2_plus[i] - fw2_minus[i]) / (2 * h) for i in range(len(w2val))]
+
+
+plt.figure(figsize=(10, 6))
+plt.plot(w2val, fw2, label="$f(w_2)$", color="blue")
+
+plt.plot(w2val, partial_derivative, label="Analytical Derivative $\\frac{\partial f}{\partial w_2}$", color="red", linestyle="--")
+plt.plot(w2val, numerical_derivative, label="Numerical Derivative", color="green", linestyle=":")
+
+
 plt.xlabel("$w2$")
 plt.ylabel("$f(w2)$")
 plt.title("Plot of $f(w2)$")
