@@ -1,5 +1,9 @@
+
 import matplotlib.pyplot as plt
 import numpy as np
+
+from matplotlib import cm
+from matplotlib.ticker import LinearLocator
 
 #1
 i = [1,2,3]
@@ -33,7 +37,7 @@ X = np.column_stack([ones, x1, x2])
 w2val = np.linspace(-2, 2, 100)
 
 fw2 = [np.linalg.norm(y - X @ np.array([0, 0, w2]))**2 for w2 in w2val]
-print(fw2)
+#print(fw2)
 
 
 # Partial derivative analytical
@@ -59,3 +63,34 @@ plt.title("Plot of $f(w2)$")
 plt.grid()
 plt.legend()
 plt.show()
+
+
+# 6 Compute the analytical solution for w using the normal equation: w = (X^T * X)^-1 * X^T * y
+X_transpose = X.T
+w = np.linalg.inv(X_transpose @ X) @ X_transpose @ y
+print(w)
+
+#7
+fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
+
+x1 = np.arange(-5, 5, 0.25)
+x2 = np.arange(-5, 5, 0.25)
+x1, x2 = np.meshgrid(x1, x2)
+z = w[0] + w[1] * x1 + w[2] * x2
+
+surf = ax.plot_surface(x1, x2, z, cmap=cm.coolwarm, linewidth=0, antialiased=False)
+
+ax.set_zlim(-10, 10)
+ax.zaxis.set_major_locator(LinearLocator(10))
+ax.zaxis.set_major_formatter('{x:.01f}')
+
+cbar = fig.colorbar(surf, shrink=0.8, aspect=20, pad=0.1)
+cbar.set_label("Model Output h(x)")
+
+ax.set_xlabel("$x_1$")
+ax.set_ylabel("$x_2$")
+ax.set_zlabel("$h(x)$")
+ax.set_title("Linear Regression 3D")
+
+plt.show()
+
